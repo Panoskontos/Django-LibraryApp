@@ -75,3 +75,13 @@ def Login(request):
                 auth.login(request, custom_user)
                 return redirect('home')
     return render(request, 'Mylibrary/Register.html', {'form': form})
+
+
+def add_book(request):
+    form = BookForm()
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request, 'Mylibrary/add_book.html', {'form': form})

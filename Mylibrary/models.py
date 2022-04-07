@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+import uuid
 # Create your models here.
 
 
@@ -42,3 +42,25 @@ class Author(models.Model):
 
     def __str__(self):
         return(self.name)
+
+
+class Book(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author, blank=True)
+    publisher = models.ForeignKey(
+        Publisher, on_delete=models.CASCADE, blank=True)
+    publication_date = models.DateField()
+    STARS = (
+        ('1 star', '1 star'),
+        ('2 star', '2 star'),
+        ('3 star', '3 star'),
+        ('4 star', '4 star'),
+    )
+    num_stars = models.CharField(max_length=50,
+                                 choices=STARS, null=True, blank=True)
+    number_of_rates = models.IntegerField(default=0)
+    book = models.FileField()
+
+    def __str__(self):
+        return(self.title)

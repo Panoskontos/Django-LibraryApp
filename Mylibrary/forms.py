@@ -24,3 +24,10 @@ class LoginForm(forms.Form):
         widgets = {
             'password': forms.PasswordInput(),
         }
+
+
+class BookForm(ModelForm):
+    class Meta:
+        model = Book
+        fields = '__all__'
+        exclude = ['number_of_rates', 'num_stars', 'id']
