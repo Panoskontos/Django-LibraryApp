@@ -5,3 +5,10 @@
 <link rel="stylesheet" href="{% static 'Mylibrary/index.css' %}">
 
 <h1>Home</h1>
+
+{{request.user.is_authenticated}}
+
+<h3>Account Details</h3>
+{{request.user.user_type}}
+<br>
+{{request.user.username}}

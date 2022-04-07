@@ -2,12 +2,15 @@ from django.shortcuts import redirect, render
 from .forms import *
 from .models import *
 # Create your views here.
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
     return render(request, 'Mylibrary/home.html', {})
 
 
+@login_required(login_url='login')
 def AuthorRegister(request):
     form = AuthorRegistartionForm()
     if request.method == 'POST':
@@ -49,4 +52,26 @@ def PublisherRegister(request):
         publisher.save()
         return redirect('home')
 
+    return render(request, 'Mylibrary/Register.html', {'form': form})
+
+
+def Login(request):
+    form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            # grab username, password
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            custom_user = CustomUser.objects.get(
+                username=username, password=password)
+            print(custom_user)
+            if custom_user is None:
+                return redirect('login')
+            else:
+                # authenticate user
+                print(custom_user.user_type)
+                auth.login(request, custom_user)
+                return redirect('home')
     return render(request, 'Mylibrary/Register.html', {'form': form})
