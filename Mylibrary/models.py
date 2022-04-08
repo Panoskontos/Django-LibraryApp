@@ -64,3 +64,9 @@ class Book(models.Model):
 
     def __str__(self):
         return(self.title)
+
+
+class Favorites(models.Model):
+    publisher = models.ForeignKey(
+        Publisher, null=True, on_delete=models.CASCADE)
+    book = models.ManyToManyField(Book)

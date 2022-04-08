@@ -5,12 +5,12 @@ from .models import *
 # Create your views here.
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from .filters import *
 
 
 @login_required(login_url='login')
 def home(request):
     books = Book.objects.all()
-    print(books)
     context = {
         'books': books,
     }
@@ -142,3 +142,20 @@ def change_password(request):
             return redirect('change_password')
 
     return render(request, 'Mylibrary/Register.html', {'form': form})
+
+
+def user_logout(request):
+    auth.logout(request)
+    return redirect('login')
+
+
+def search_book(request):
+    books = Book.objects.all()
+    myFilter = BookFilters(request.GET, queryset=books)
+    books = myFilter.qs
+    context = {
+        'myFilter': myFilter,
+        'books': books,
+
+    }
+    return render(request, 'Mylibrary/search_book.html', context)
