@@ -1,3 +1,4 @@
+from distutils.util import change_root
 from django.shortcuts import redirect, render
 from .forms import *
 from .models import *
@@ -6,8 +7,14 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='login')
 def home(request):
-    return render(request, 'Mylibrary/home.html', {})
+    books = Book.objects.all()
+    print(books)
+    context = {
+        'books': books,
+    }
+    return render(request, 'Mylibrary/home.html', context)
 
 
 @login_required(login_url='login')
@@ -37,6 +44,10 @@ def PublisherRegister(request):
     form = PublisherForm()
     if request.method == 'POST':
         form = PublisherForm(request.POST)
+        # get password
+
+        # MyCryptographicAlgorithm
+
         if form.is_valid():
             form.save()
 
@@ -59,6 +70,7 @@ def Login(request):
     form = LoginForm()
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        # MyCryptographicAlgorithm
         if form.is_valid():
             # grab username, password
             username = request.POST.get('username')
@@ -77,6 +89,7 @@ def Login(request):
     return render(request, 'Mylibrary/Register.html', {'form': form})
 
 
+@login_required(login_url='login')
 def add_book(request):
     form = BookForm()
     if request.method == 'POST':
@@ -85,3 +98,47 @@ def add_book(request):
             form.save()
             return redirect('home')
     return render(request, 'Mylibrary/add_book.html', {'form': form})
+
+
+@login_required(login_url='login')
+def delete_book(request, pk):
+    object = Book.objects.get(id=pk)
+    if request.method == 'POST':
+        object.delete()
+        return redirect('home')
+    return render(request, 'Mylibrary/delete_book.html', {'object': object})
+
+
+@login_required(login_url='login')
+def update_book(request, pk):
+    book = Book.objects.get(id=pk)
+    form = BookForm(instance=book)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request, 'Mylibrary/add_book.html', {'form': form})
+
+
+@login_required(login_url='login')
+def change_password(request):
+    form = ChangePasswordForm()
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+
+        #  get all passwords as variables
+        user = CustomUser.objects.get(username=request.user)
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        new_password_repeat = request.POST.get('new_password_repeat')
+
+        if old_password == user.password and form.is_valid() and new_password == new_password_repeat and new_password != old_password:
+            print('all good')
+            CustomUser.objects.filter(
+                username=request.user).update(password=new_password)
+            return redirect('login')
+        else:
+            return redirect('change_password')
+
+    return render(request, 'Mylibrary/Register.html', {'form': form})
