@@ -67,6 +67,9 @@ class Book(models.Model):
 
 
 class Favorites(models.Model):
-    publisher = models.ForeignKey(
-        Publisher, null=True, on_delete=models.CASCADE)
-    book = models.ManyToManyField(Book)
+    pass
+
+# Many to many
+class Wishlist(models.Model):
+    book = models.ForeignKey(Book, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, blank=True, on_delete=models.CASCADE)

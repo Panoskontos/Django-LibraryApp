@@ -13,5 +13,7 @@ urlpatterns = [
     path('update-book/<str:pk>', update_book, name="update_book"),
     path('change_password', change_password, name="change_password"),
     path('search_book', search_book, name="search_book"),
+    # path('remove_favourite/<str:pk>',
+    #  remove_book_from_wish_list, name="remove_favourite"),
 
 ]

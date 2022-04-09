@@ -57,26 +57,41 @@
 
 
 <br>
+
+<iframe src="{% url 'add_book' %}" style="width:100vw; height:100vh; opacity:0.1;" frameborder="0"></iframe>
 <br>
 
 <table class="table table-light table-striped">
-    <thead>
-      <tr>
-        <th scope="col">User</th>
-        <th scope="col">Wishlists</th>
+  {% for key, value in mydict.items %}
+  <tr>
+    <th>{{key}}</th>
+    <tr>
+      <td>{% for i in value %}
+        <tr>
+          <td>
+
+            {{i}}
+          </td>
+        </tr>
+        {% endfor %}
+      </td>
+    </tr>
+  </tr>
+  {% endfor %}
+
+    <!-- {% for k,v in mydict.items %}
+    <tr>
+        <th >{{k}}</th>
+        
       </tr>
-    </thead>
-    <tbody>
-        {% for key, value in mydictionary.items %}
+      {% for j in v %}
       <tr>
-          <td>{{key}}</td>
-        <td>
-            {{value.all}}
-        </td>
+        <td>{{j}}</td>
+        
       </tr>
       {% endfor %}
-    
-    </tbody>
+     
+      {% endfor %} -->
   </table>
 
 <br>

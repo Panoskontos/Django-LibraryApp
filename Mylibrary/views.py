@@ -11,8 +11,30 @@ from .filters import *
 @login_required(login_url='login')
 def home(request):
     books = Book.objects.all()
+
+    wishlist = Wishlist.objects.all()
+    mydict = {}
+    # O(n)
+    for i in wishlist:
+        mydict[i.user.username] = set()
+    for i in wishlist:
+        mydict[i.user.username].add(i.book.title)
+    print(mydict)
+    # wishlist = Wishlist.objects.all()
+    # mydict = dict()
+    # # O(n)
+    # # create empty sets
+    # for i in wishlist:
+    #     mydict[i.user.username] = set()
+    # # add to arrays
+    # for i in wishlist:
+    #     mydict[i.user.username].add(i.book.title)
+
+    # print(mydict)
     context = {
+        'wishlist': wishlist,
         'books': books,
+        'mydict': mydict,
     }
     return render(request, 'Mylibrary/home.html', context)
 
@@ -115,6 +137,7 @@ def update_book(request, pk):
     form = BookForm(instance=book)
     if request.method == 'POST':
         form = BookForm(request.POST, instance=book)
+        print(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
@@ -159,3 +182,17 @@ def search_book(request):
 
     }
     return render(request, 'Mylibrary/search_book.html', context)
+
+
+def remove_book_from_wish_list(request, pk):
+
+    book = Book.objects.get(id=pk)
+    user = CustomUser.objects.get(username=request.user)
+
+    wishlist = Wishlist.objects.filter(book=book, user=user)
+
+    object = book
+    print(wishlist)
+    if request.method == 'POST':
+        pass
+    return render(request, 'Mylibrary/delete_book.html', {'object': object})
