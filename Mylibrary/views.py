@@ -7,7 +7,9 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from .filters import *
 
-# I edited this 
+# I edited this
+
+
 @login_required(login_url='login')
 def home(request):
     books = Book.objects.all()
@@ -196,3 +198,6 @@ def remove_book_from_wish_list(request, pk):
     if request.method == 'POST':
         pass
     return render(request, 'Mylibrary/delete_book.html', {'object': object})
+
+
+# New code added in this branch
