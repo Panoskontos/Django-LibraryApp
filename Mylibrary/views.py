@@ -54,7 +54,6 @@ def AuthorRegister(request):
         user = CustomUser.objects.get(username=username)
         # make him an author
         user.user_type = 'Author'
-        user.save()
 
         # Create new author
         author = Author(user=user, name=username)
