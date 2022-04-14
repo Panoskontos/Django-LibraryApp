@@ -7,7 +7,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from .filters import *
 
-
+# I edited this 
 @login_required(login_url='login')
 def home(request):
     books = Book.objects.all()
