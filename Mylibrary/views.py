@@ -7,7 +7,9 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from .filters import *
 
-# I edited this 
+# I edited this
+
+
 @login_required(login_url='login')
 def home(request):
     books = Book.objects.all()
@@ -188,8 +190,6 @@ def remove_book_from_wish_list(request, pk):
 
     book = Book.objects.get(id=pk)
     user = CustomUser.objects.get(username=request.user)
-
-    wishlist = Wishlist.objects.filter(book=book, user=user)
 
     object = book
     print(wishlist)
