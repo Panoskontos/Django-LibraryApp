@@ -67,9 +67,14 @@ class Book(models.Model):
 
 
 class Favorites(models.Model):
-    pass
+    date_created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return(self.date_created)
 
 # Many to many
+
+
 class Wishlist(models.Model):
     book = models.ForeignKey(Book, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, blank=True, on_delete=models.CASCADE)

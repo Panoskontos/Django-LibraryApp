@@ -6,6 +6,7 @@ from .models import *
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from .filters import *
+import requests
 
 
 @login_required(login_url='login')
@@ -30,11 +31,22 @@ def home(request):
     # for i in wishlist:
     #     mydict[i.user.username].add(i.book.title)
 
+
+# API
+    url = "http://universities.hipolabs.com/search?country=United+Kingdom"
+    r = requests.get(url)
+    object = r.json()
+    print(object)
+
     # print(mydict)
     context = {
         'wishlist': wishlist,
         'books': books,
         'mydict': mydict,
+
+
+        # API data
+        'object': object,
     }
     return render(request, 'Mylibrary/home.html', context)
 
