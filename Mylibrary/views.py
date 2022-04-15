@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from .filters import *
 import requests
 
+# I edited this
+
 
 @login_required(login_url='login')
 def home(request):
@@ -64,7 +66,6 @@ def AuthorRegister(request):
         user = CustomUser.objects.get(username=username)
         # make him an author
         user.user_type = 'Author'
-        user.save()
 
         # Create new author
         author = Author(user=user, name=username)
@@ -200,8 +201,6 @@ def remove_book_from_wish_list(request, pk):
 
     book = Book.objects.get(id=pk)
     user = CustomUser.objects.get(username=request.user)
-
-    wishlist = Wishlist.objects.filter(book=book, user=user)
 
     object = book
     print(wishlist)
